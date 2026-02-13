@@ -1,0 +1,67 @@
+# Base image: Alpine Linux
+FROM alpine:latest
+
+# Metadata
+LABEL maintainer="your_email@example.com"
+LABEL description="Router with FRRouting for GNS3 BADASS project"
+
+# Install FRRouting and dependencies
+RUN apk update && \
+    apk add --no-cache \
+    frr \
+    frr-pythontools \
+    iproute2 \
+    bash \
+    busybox \
+    tcpdump \
+    vim \
+    && rm -rf /var/cache/apk/*
+
+# Enable IP forwarding (required for routing)
+RUN echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf && \
+    echo "net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
+
+# Create FRR configuration directory
+RUN mkdir -p /etc/frr && \
+    chown -R frr:frr /etc/frr
+
+# Create default FRR configuration files
+RUN touch /etc/frr/frr.conf && \
+    touch /etc/frr/vtysh.conf && \
+    chown frr:frr /etc/frr/frr.conf && \
+    chown frr:frr /etc/frr/vtysh.conf && \
+    chmod 640 /etc/frr/frr.conf && \
+    chmod 640 /etc/frr/vtysh.conf
+
+# Enable routing daemons in FRR
+RUN sed -i 's/bgpd=no/bgpd=yes/' /etc/frr/daemons && \
+    sed -i 's/ospfd=no/ospfd=yes/' /etc/frr/daemons && \
+    sed -i 's/isisd=no/isisd=yes/' /etc/frr/daemons && \
+    sed -i 's/zebra=no/zebra=yes/' /etc/frr/daemons
+
+# Create startup script
+RUN printf '#!/bin/bash\n\
+# Apply sysctl settings\n\
+sysctl -p 2>/dev/null || true\n\
+\n\
+# Start FRR\n\
+echo "Starting FRRouting..."\n\
+/usr/lib/frr/frrinit.sh start\n\
+\n\
+# Wait a moment for daemons to start\n\
+sleep 2\n\
+\n\
+# Show status\n\
+echo "FRR Status:"\n\
+/usr/lib/frr/frrinit.sh status\n\
+\n\
+# Keep container running\n\
+echo "Router is ready. Use vtysh to configure."\n\
+tail -f /dev/null\n' > /start.sh && \
+    chmod +x /start.sh
+
+# Expose FRR ports (optional, for reference)
+EXPOSE 179 2601 2605
+
+# Start FRR when container launches
+CMD ["/start.sh"]

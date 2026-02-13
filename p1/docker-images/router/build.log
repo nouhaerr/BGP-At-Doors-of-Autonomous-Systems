@@ -1,0 +1,43 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.16kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/alpine:latest
+#2 DONE 0.5s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/7] FROM docker.io/library/alpine:latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+#4 DONE 0.0s
+
+#5 [2/7] RUN apk update &&     apk add --no-cache     frr     frr-pythontools     iproute2     bash     busybox     tcpdump     vim     && rm -rf /var/cache/apk/*
+#5 CACHED
+
+#6 [3/7] RUN echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf &&     echo "net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
+#6 CACHED
+
+#7 [internal] load build context
+#7 transferring context: 824B done
+#7 DONE 0.0s
+
+#8 [4/7] RUN mkdir -p /etc/frr &&     chown -R frr:frr /etc/frr &&     touch /etc/frr/frr.conf &&     touch /etc/frr/vtysh.conf &&     chown frr:frr /etc/frr/frr.conf /etc/frr/vtysh.conf &&     chmod 640 /etc/frr/frr.conf /etc/frr/vtysh.conf
+#8 DONE 0.2s
+
+#9 [5/7] RUN sed -i 's/^bgpd=.*/bgpd=yes/' /etc/frr/daemons &&     sed -i 's/^ospfd=.*/ospfd=yes/' /etc/frr/daemons &&     sed -i 's/^isisd=.*/isisd=yes/' /etc/frr/daemons &&     sed -i 's/^zebra=.*/zebra=yes/' /etc/frr/daemons
+#9 DONE 0.2s
+
+#10 [6/7] COPY start.sh /start.sh
+#10 DONE 0.1s
+
+#11 [7/7] RUN chmod +x /start.sh
+#11 DONE 0.2s
+
+#12 exporting to image
+#12 exporting layers 0.1s done
+#12 writing image sha256:9b8779a9b76aa7174337d59cad06d317c0c3fe4c01ec31ce48a2372beebffbb9 done
+#12 naming to docker.io/library/router-frr:1.0 done
+#12 DONE 0.1s
