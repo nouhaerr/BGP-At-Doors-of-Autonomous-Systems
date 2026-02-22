@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Route Reflector Configuration - wil-1
+# Route Reflector Configuration - nerrakeb-1
 # BADASS Project - Part 3
 #
 # This router is the BGP Route Reflector
@@ -10,19 +10,19 @@
 #
 
 echo "=========================================="
-echo "Configuring wil-1 (Route Reflector)"
+echo "Configuring nerrakeb-1 (Route Reflector)"
 echo "=========================================="
 
 # Configure interfaces
 echo "→ Configuring interfaces..."
 ip link set eth0 up
-ip addr add 10.1.1.1/30 dev eth0   # Link to wil-2
+ip addr add 10.1.1.1/30 dev eth0   # Link to nerrakeb-2
 
 ip link set eth1 up
-ip addr add 10.1.1.5/30 dev eth1   # Link to wil-3
+ip addr add 10.1.1.5/30 dev eth1   # Link to nerrakeb-3
 
 ip link set eth2 up
-ip addr add 10.1.1.9/30 dev eth2   # Link to wil-4
+ip addr add 10.1.1.9/30 dev eth2   # Link to nerrakeb-4
 
 # Configure loopback (VTEP identifier)
 echo "→ Configuring loopback..."
@@ -42,7 +42,7 @@ vtysh << 'VTYSH_EOF'
 configure terminal
 
 ! Set hostname
-hostname wil-1
+hostname nerrakeb-1
 
 ! Configure OSPF
 router ospf

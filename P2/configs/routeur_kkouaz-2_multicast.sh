@@ -1,18 +1,18 @@
 #!/bin/bash
 #
-# Router 2 Configuration - Static VXLAN
+# Router 2 Configuration - Multicast VXLAN
 # BADASS Project - Part 2
 #
-# This router is a VTEP (VXLAN Tunnel Endpoint)
-# Underlay IP: 10.1.1.2/24 (to other router)
-# VXLAN: VNI 10, static remote VTEP
+# This router is a VTEP with multicast for dynamic discovery
+# Underlay IP: 10.1.1.2/24
+# VXLAN: VNI 10, multicast group 239.1.1.1
 #
 
 echo "=========================================="
-echo "Configuring routeur_login-2 - Static VXLAN"
+echo "Configuring routeur_kkouaz-2 - Multicast VXLAN"
 echo "=========================================="
 
-# Configure underlay network (connection to other router via switch)
+# Configure underlay network
 echo "→ Configuring underlay network (eth0)..."
 ip link set eth0 up
 ip addr add 10.1.1.2/24 dev eth0
@@ -21,13 +21,14 @@ ip addr add 10.1.1.2/24 dev eth0
 echo "→ Configuring host interface (eth1)..."
 ip link set eth1 up
 
-# Create VXLAN interface
-echo "→ Creating VXLAN interface (vxlan10)..."
+# Create VXLAN interface with multicast
+echo "→ Creating VXLAN interface with multicast (vxlan10)..."
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
     local 10.1.1.2 \
-    remote 10.1.1.1
+    group 239.1.1.1 \
+    dev eth0
 
 # Create bridge
 echo "→ Creating bridge (br0)..."
@@ -52,21 +53,15 @@ echo ""
 echo "Underlay network (eth0):"
 ip addr show eth0 | grep "inet "
 echo ""
-echo "Bridge (br0):"
-ip link show br0
-echo ""
-echo "VXLAN interface:"
-ip -d link show vxlan10 | head -5
+echo "VXLAN interface (with multicast):"
+ip -d link show vxlan10 | head -7
 echo ""
 echo "Bridge forwarding database:"
 bridge fdb show dev vxlan10
 echo ""
 
-# Test underlay connectivity
-echo "=========================================="
-echo "Testing Underlay Connectivity"
-echo "=========================================="
-echo "→ Ping router 1 (10.1.1.1)..."
-ping -c 3 10.1.1.1
+# Show multicast group
+echo "Multicast group membership:"
+ip maddr show dev eth0 | grep 239.1.1.1 || echo "  (Will join 239.1.1.1 when traffic flows)"
 
 echo ""

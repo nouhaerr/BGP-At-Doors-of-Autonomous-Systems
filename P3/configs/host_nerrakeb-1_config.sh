@@ -1,7 +1,7 @@
 #!/bin/bash
 # Host 1 Configuration
 
-echo "Configuring host_wil-1..."
+echo "Configuring host_nerrakeb-1..."
 ip addr add 20.1.1.1/24 dev eth0
 ip link set eth0 up
 

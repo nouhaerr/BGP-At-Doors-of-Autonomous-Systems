@@ -1,34 +1,33 @@
 #!/bin/bash
 #
-# Router 1 Configuration - Multicast VXLAN
+# Router 2 Configuration - Static VXLAN
 # BADASS Project - Part 2
 #
-# This router is a VTEP with multicast for dynamic discovery
-# Underlay IP: 10.1.1.1/24
-# VXLAN: VNI 10, multicast group 239.1.1.1
+# This router is a VTEP (VXLAN Tunnel Endpoint)
+# Underlay IP: 10.1.1.2/24 (to other router)
+# VXLAN: VNI 10, static remote VTEP
 #
 
 echo "=========================================="
-echo "Configuring routeur_login-1 - Multicast VXLAN"
+echo "Configuring routeur_kkouaz-2 - Static VXLAN"
 echo "=========================================="
 
-# Configure underlay network
+# Configure underlay network (connection to other router via switch)
 echo "→ Configuring underlay network (eth0)..."
 ip link set eth0 up
-ip addr add 10.1.1.1/24 dev eth0
+ip addr add 10.1.1.2/24 dev eth0
 
 # Configure interface to host
 echo "→ Configuring host interface (eth1)..."
 ip link set eth1 up
 
-# Create VXLAN interface with multicast
-echo "→ Creating VXLAN interface with multicast (vxlan10)..."
+# Create VXLAN interface
+echo "→ Creating VXLAN interface (vxlan10)..."
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
-    local 10.1.1.1 \
-    group 239.1.1.1 \
-    dev eth0
+    local 10.1.1.2 \
+    remote 10.1.1.1
 
 # Create bridge
 echo "→ Creating bridge (br0)..."
@@ -53,15 +52,21 @@ echo ""
 echo "Underlay network (eth0):"
 ip addr show eth0 | grep "inet "
 echo ""
-echo "VXLAN interface (with multicast):"
-ip -d link show vxlan10 | head -7
+echo "Bridge (br0):"
+ip link show br0
+echo ""
+echo "VXLAN interface:"
+ip -d link show vxlan10 | head -5
 echo ""
 echo "Bridge forwarding database:"
 bridge fdb show dev vxlan10
 echo ""
 
-# Show multicast group
-echo "Multicast group membership:"
-ip maddr show dev eth0 | grep 239.1.1.1 || echo "  (Will join 239.1.1.1 when traffic flows)"
+# Test underlay connectivity
+echo "=========================================="
+echo "Testing Underlay Connectivity"
+echo "=========================================="
+echo "→ Ping router 1 (10.1.1.1)..."
+ping -c 3 10.1.1.1
 
 echo ""

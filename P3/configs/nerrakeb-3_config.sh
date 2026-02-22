@@ -1,23 +1,23 @@
 #!/bin/bash
 #
-# Leaf Router Configuration - wil-4
+# Leaf Router Configuration - nerrakeb-3
 # BADASS Project - Part 3
 #
 
 echo "=========================================="
-echo "Configuring wil-4 (Leaf/VTEP)"
+echo "Configuring nerrakeb-3 (Leaf/VTEP)"
 echo "=========================================="
 
 # Configure interface to route reflector
 ip link set eth0 up
-ip addr add 10.1.1.10/30 dev eth0
+ip addr add 10.1.1.6/30 dev eth0
 
 # Configure interface to host
 ip link set eth1 up
 
 # Configure loopback
 ip link add lo0 type dummy
-ip addr add 1.1.1.4/32 dev lo0
+ip addr add 1.1.1.3/32 dev lo0
 ip link set lo0 up
 
 # Enable IP forwarding
@@ -27,7 +27,7 @@ sysctl -w net.ipv4.ip_forward=1
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
-    local 1.1.1.4 \
+    local 1.1.1.3 \
     nolearning
 
 # Create bridge
@@ -45,15 +45,15 @@ sleep 2
 vtysh << 'VTYSH_EOF'
 configure terminal
 
-hostname wil-4
+hostname nerrakeb-3
 
 router ospf
-  network 10.1.1.8/30 area 0
-  network 1.1.1.4/32 area 0
+  network 10.1.1.4/30 area 0
+  network 1.1.1.3/32 area 0
   exit
 
 router bgp 1
-  bgp router-id 1.1.1.4
+  bgp router-id 1.1.1.3
   no bgp default ipv4-unicast
   neighbor 1.1.1.1 remote-as 1
   neighbor 1.1.1.1 update-source lo0
@@ -69,7 +69,7 @@ VTYSH_EOF
 
 echo ""
 echo "=========================================="
-echo "wil-4 Configured"
+echo "nerrakeb-3 Configured"
 echo "=========================================="
 echo ""
 vtysh -c "show bgp l2vpn evpn summary"

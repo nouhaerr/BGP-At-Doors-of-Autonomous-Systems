@@ -36,25 +36,25 @@ GNS3 TOPOLOGY SETUP
 1. New Project: P3
 
 2. Add Devices:
-   • 4x routeur_yourlogin (wil-1, wil-2, wil-3, wil-4)
-   • 3x host_yourlogin (host_wil-1, host_wil-2, host_wil-3)
+   • 4x routeur_nerrakeb (nerrakeb-1, nerrakeb-2, nerrakeb-3, nerrakeb-4)
+   • 3x host_nerrakeb (host_nerrakeb-1, host_nerrakeb-2, host_nerrakeb-3)
 
 3. Connect (Star topology):
    
-            wil-1 (Route Reflector)
+            nerrakeb-1 (Route Reflector)
            /  |  \
           /   |   \
-      wil-2 wil-3 wil-4 (Leaf VTEPs)
+      nerrakeb-2 nerrakeb-3 nerrakeb-4 (Leaf VTEPs)
         |     |     |
      host1  host2  host3
 
    Connections:
-   • wil-1 eth0 ↔ wil-2 eth0
-   • wil-1 eth1 ↔ wil-3 eth0
-   • wil-1 eth2 ↔ wil-4 eth0
-   • wil-2 eth1 ↔ host_wil-1 eth0
-   • wil-3 eth1 ↔ host_wil-2 eth0
-   • wil-4 eth1 ↔ host_wil-3 eth0
+   • nerrakeb-1 eth0 ↔ nerrakeb-2 eth0
+   • nerrakeb-1 eth1 ↔ nerrakeb-3 eth0
+   • nerrakeb-1 eth2 ↔ nerrakeb-4 eth0
+   • nerrakeb-2 eth1 ↔ host_nerrakeb-1 eth0
+   • nerrakeb-3 eth1 ↔ host_nerrakeb-2 eth0
+   • nerrakeb-4 eth1 ↔ host_nerrakeb-3 eth0
 
 4. Start all devices (Play button)
 
@@ -73,51 +73,51 @@ TOPOLOGY
         echo "Copy-paste these into GNS3 consoles:"
         echo ""
         
-        echo -e "${YELLOW}=== WIL-1 (Route Reflector) ===${NC}"
+        echo -e "${YELLOW}=== NERRAKEB-1 (Route Reflector) ===${NC}"
         echo ""
-        cat configs/wil-1_config.sh
-        echo ""
-        echo "---"
-        echo ""
-        
-        echo -e "${YELLOW}=== WIL-2 (Leaf) ===${NC}"
-        echo ""
-        cat configs/wil-2_config.sh
+        cat configs/nerrakeb-1_config.sh
         echo ""
         echo "---"
         echo ""
         
-        echo -e "${YELLOW}=== WIL-3 (Leaf) ===${NC}"
+        echo -e "${YELLOW}=== NERRAKEB-2 (Leaf) ===${NC}"
         echo ""
-        cat configs/wil-3_config.sh
+        cat configs/nerrakeb-2_config.sh
         echo ""
         echo "---"
         echo ""
         
-        echo -e "${YELLOW}=== WIL-4 (Leaf) ===${NC}"
+        echo -e "${YELLOW}=== NERRAKEB-3 (Leaf) ===${NC}"
         echo ""
-        cat configs/wil-4_config.sh
+        cat configs/nerrakeb-3_config.sh
+        echo ""
+        echo "---"
+        echo ""
+        
+        echo -e "${YELLOW}=== NERRAKEB-4 (Leaf) ===${NC}"
+        echo ""
+        cat configs/nerrakeb-4_config.sh
         echo ""
         echo "---"
         echo ""
         
         echo -e "${YELLOW}=== HOST 1 ===${NC}"
         echo ""
-        cat configs/host_wil-1_config.sh
+        cat configs/host_nerrakeb-1_config.sh
         echo ""
         echo "---"
         echo ""
         
         echo -e "${YELLOW}=== HOST 2 ===${NC}"
         echo ""
-        cat configs/host_wil-2_config.sh
+        cat configs/host_nerrakeb-2_config.sh
         echo ""
         echo "---"
         echo ""
         
         echo -e "${YELLOW}=== HOST 3 ===${NC}"
         echo ""
-        cat configs/host_wil-3_config.sh
+        cat configs/host_nerrakeb-3_config.sh
         echo ""
         
         echo "=========================================="

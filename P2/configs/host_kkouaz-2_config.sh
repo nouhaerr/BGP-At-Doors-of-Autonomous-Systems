@@ -8,7 +8,7 @@
 #
 
 echo "=========================================="
-echo "Configuring host_login-2"
+echo "Configuring host_kkouaz-2"
 echo "=========================================="
 
 # Configure interface
@@ -29,7 +29,7 @@ echo ""
 echo "=========================================="
 echo "Testing Connectivity"
 echo "=========================================="
-echo "→ Ping host_login-1 (20.1.1.1)..."
+echo "→ Ping host_kkouaz-1 (20.1.1.1)..."
 ping -c 3 20.1.1.1
 
 if [ $? -eq 0 ]; then

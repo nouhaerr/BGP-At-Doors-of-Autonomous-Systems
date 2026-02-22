@@ -4,7 +4,7 @@
 
 ### Static VXLAN Setup
 
-**On routeur_login-1:**
+**On routeur_kkouaz-1:**
 ```bash
 # Underlay network
 ip link set eth0 up
@@ -26,7 +26,7 @@ ip link set vxlan10 up
 ip link set br0 up
 ```
 
-**On routeur_login-2:**
+**On routeur_kkouaz-2:**
 ```bash
 # Underlay network
 ip link set eth0 up
@@ -48,14 +48,14 @@ ip link set vxlan10 up
 ip link set br0 up
 ```
 
-**On host_login-1:**
+**On host_kkouaz-1:**
 ```bash
 ip addr add 20.1.1.1/24 dev eth0
 ip link set eth0 up
 ping 20.1.1.2
 ```
 
-**On host_login-2:**
+**On host_kkouaz-2:**
 ```bash
 ip addr add 20.1.1.2/24 dev eth0
 ip link set eth0 up
@@ -66,7 +66,7 @@ ping 20.1.1.1
 
 ### Multicast VXLAN Setup
 
-**On routeur_login-1:**
+**On routeur_kkouaz-1:**
 ```bash
 # Underlay network
 ip link set eth0 up
@@ -89,7 +89,7 @@ ip link set vxlan10 up
 ip link set br0 up
 ```
 
-**On routeur_login-2:**
+**On routeur_kkouaz-2:**
 ```bash
 # Underlay network
 ip link set eth0 up
